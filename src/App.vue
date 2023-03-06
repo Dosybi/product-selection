@@ -1,59 +1,3 @@
-<script>
-import { userItems, selectionItems } from '../data'
-import ItemsSection from './components/ItemsSection.vue'
-import SelectedSection from './components/SelectedSection.vue'
-
-export default {
-  name: 'IndexPage',
-  components: { ItemsSection, SelectedSection },
-
-  data() {
-    return {
-      userItems: userItems,
-      selectionItems: selectionItems,
-      userSelected: [],
-      previewSelected: '',
-    }
-  },
-
-  methods: {
-    handleUserSelection(data) {
-      const newUserSelectedItems = [...this.userSelected]
-
-      if (
-        newUserSelectedItems.includes(data) ||
-        newUserSelectedItems.length === 6
-      )
-        return
-
-      newUserSelectedItems.push(data)
-      const newUserItems = this.userItems.filter((item) => item.id !== data.id)
-      this.userSelected = newUserSelectedItems
-      this.userItems = newUserItems
-    },
-
-    handlePreviewSelection(data) {
-      let newPreviewSelected = this.previewSelected
-
-      if (newPreviewSelected.name === data.name) return
-
-      newPreviewSelected = data.name
-      this.previewSelected = newPreviewSelected
-    },
-
-    deleteItem(item) {
-      const newUserSelectedItems = [...this.userSelected].filter(
-        (selectedItem) => selectedItem.id !== item.id
-      )
-      const newUserItems = [...this.userItems, item]
-
-      this.userSelected = newUserSelectedItems
-      this.userItems = newUserItems
-    },
-  },
-}
-</script>
-
 <template>
   <main class="p-6">
     <div class="flex gap-1 justify-between">
@@ -72,3 +16,52 @@ export default {
     </div>
   </main>
 </template>
+
+<script>
+import { ref } from 'vue'
+import { userItems, selectionItems } from '../data'
+import ItemsSection from './components/ItemsSection.vue'
+import SelectedSection from './components/SelectedSection.vue'
+
+export default {
+  name: 'IndexPage',
+  components: { ItemsSection, SelectedSection },
+
+  setup() {
+    const userSelected = ref([])
+    const previewSelected = ref('')
+
+    const handleUserSelection = (data) => {
+      if (userSelected.value.includes(data) || userSelected.value.length === 6)
+        return
+
+      userSelected.value.push(data)
+      const newUserItems = userItems.filter((item) => item.id !== data.id)
+      userItems.value = newUserItems
+    }
+
+    const handlePreviewSelection = (data) => {
+      if (previewSelected.value.name === data.name) return
+
+      previewSelected.value = data.name
+    }
+
+    const deleteItem = (item) => {
+      userSelected.value = userSelected.value.filter(
+        (selectedItem) => selectedItem.id !== item.id
+      )
+      userItems.value = [...userItems.value, item]
+    }
+
+    return {
+      userItems,
+      selectionItems,
+      userSelected,
+      previewSelected,
+      handleUserSelection,
+      handlePreviewSelection,
+      deleteItem,
+    }
+  },
+}
+</script>
