@@ -1,25 +1,3 @@
-<script>
-export default {
-  name: 'SelectedSection',
-  props: {
-    items: {
-      type: Array,
-      required: false,
-    },
-    preview: {
-      type: String,
-      required: false,
-    },
-  },
-
-  methods: {
-    deleteItem(item) {
-      this.$emit('handle-deletion', item)
-    },
-  },
-}
-</script>
-
 <template>
   <div v-if="!preview" class="border w-1/2 lg:w-1/4 flex gap-1 flex-wrap p-4">
     <div
@@ -41,3 +19,25 @@ export default {
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'SelectedSection',
+  props: {
+    items: {
+      type: Array,
+      required: false,
+    },
+    preview: {
+      type: String,
+      required: false,
+    },
+  },
+
+  methods: {
+    deleteItem(item) {
+      this.$emit('handle-deletion', item)
+    },
+  },
+}
+</script>
